@@ -1,4 +1,5 @@
 import re
+from collections import Counter
 
 SQUID_PATTERN = r"^(?P<timestamp>\d+\.\d+)\s+(?P<response_header>\d+)\s+(?P<client_ip_address>\d+\.\d+\.\d+\.\d+)\s+(?P<http_response_code>\w+/\d+)\s+(?P<response_size_bytes>\d+)\s+(?P<method>\w+)\s+(?P<url>.+)\s+(?P<user>\w+)\s+(?P<access_type>\w+)/(?P<destination_ip>\d+\.\d+\.\d+\.\d+)(?:\s*(?P<content>.*))?\s*$"
 
@@ -12,14 +13,21 @@ def match_pattern_from_line(log_line="1157689320.327   2864 10.105.21.199 TCP_MI
 
     if match:
         dict = match.groupdict()
-        print(dict)
         return dict
     else:
-        print("Log line does not match the pattern.")
         return None
 
 #Receives a path to a log file
-#Returns a dict with the different lines broken into files
+#Returns a dict with the different IPs from the log
 
-def parse_log_file(path):
-    print("Parsing...\n")
+def get_ips_from_log(path="/home/dev/Downloads/access.log"):
+    ip_list = []
+    #open the file
+    print("Processing...")
+    with open(path, 'r') as file:
+        for line in file:
+            ip_list.append(match_pattern_from_line(line, SQUID_PATTERN)["client_ip_address"]) if match_pattern_from_line(line, SQUID_PATTERN) != None else ""
+
+    return ip_list
+
+print(Counter(get_ips_from_log()).most_common(1)[0][0])
