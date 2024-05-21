@@ -1,9 +1,7 @@
 import re
-from collections import Counter
 
-from utils import *
-
-SQUID_PATTERN = r"^(?:(?P<timestamp>\d+\.\d+)|-)\s+(?:(?P<response_header>(?:(\d+)|(-\d+)))|-)\s+(?:(?P<client_ip_address>\d+\.\d+\.\d+\.\d+)|-)\s+(?P<http_response_code>(?:(\w+)|-)/(?:(\d+)|-))\s+(?:(?P<response_size_bytes>\d+)|-)\s+(?:(?P<method>\w+)|-)\s+(?:(?P<url>.+)|-)\s+(?:(?P<user>\w+)|-)\s+(?P<access_type>\w+)/(?:(?P<destination_ip>\d+\.\d+\.\d+\.\d+)|-)(?:\s*(?P<content>.*))?\s*$"
+from .Constants import SQUID_PATTERN
+from .utils import least_repeated_item, most_repeated_item
 
 def match_pattern_from_line(log_line="1157689320.327   2864 10.105.21.199 TCP_MISS/200 10182 GET http://www.goonernews.com/ badeyek DIRECT/207.58.145.61 text/html", pattern=SQUID_PATTERN):
     """Returns dict with fields of a log line with a specific pattern.

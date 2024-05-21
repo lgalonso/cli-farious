@@ -18,7 +18,7 @@ def least_repeated_item(data):
   min_count = min(counts.values())
   least_repeated = [item for item, count in counts.items() if count == min_count]
 
-  # If multiple items have the same minimum count, return any of them.
+  # If multiple items have the same minimum count, return the first one.
   return least_repeated[0]
 
 def most_repeated_item(data):
