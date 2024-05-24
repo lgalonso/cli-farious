@@ -21,7 +21,7 @@ def remove_empty_lines(input_file, output_file):
   except FileNotFoundError:
     print(f"Error: File '{input_file}' not found.")
 
-def match_pattern_from_line(log_line = "1157689320.327   2864 10.105.21.199 TCP_MISS/200 10182 GET http://www.goonernews.com/ badeyek DIRECT/207.58.145.61 text/html", pattern = SQUID_PATTERN_EXTENDED_2):
+def parse_line_with_pattern(log_line = "1157689320.327   2864 10.105.21.199 TCP_MISS/200 10182 GET http://www.goonernews.com/ badeyek DIRECT/207.58.145.61 text/html", pattern = SQUID_PATTERN_EXTENDED_2):
     """Returns dict with fields of a log line with a specific pattern.
 
         Args:
@@ -57,10 +57,8 @@ def get_ips_from_log(path = "/home/dev/Downloads/access.log"):
 
         with open(path, 'r') as file:
             for line in file:
-                if match_pattern_from_line(line, SQUID_PATTERN) != None:
-                    ip_list.append(match_pattern_from_line(line, SQUID_PATTERN)["client_ip_address"])
-
-        print(len(ip_list))
+                if parse_line_with_pattern(line, SQUID_PATTERN) != None:
+                    ip_list.append(parse_line_with_pattern(line, SQUID_PATTERN)["client_ip_address"])
 
         return ip_list
 
@@ -93,7 +91,7 @@ def count_lines(path = "/home/dev/Downloads/access.log"):
     # Extract the number of lines (first element in the output)
     return int(output.split()[0])
   
-  except (OSError, ValueError) as e:
+  except (OSError, ValueError, FileNotFoundError) as e:
     print(f"Error counting lines: {e}")
     return None
 
@@ -160,24 +158,61 @@ def get_seconds(path = "/home/dev/Downloads/access.log"):
   """
    try:
     
-    first_timestamp = float(match_pattern_from_line(get_first_non_empty_line(path), SQUID_PATTERN_EXTENDED)["timestamp"])
-    last_timestamp = float(match_pattern_from_line(get_last_line_subprocess(path), SQUID_PATTERN_EXTENDED)["timestamp"])
+    first_timestamp = float(parse_line_with_pattern(get_first_non_empty_line(path))["timestamp"])
+    last_timestamp = float(parse_line_with_pattern(get_last_line_subprocess(path))["timestamp"])
 
     return abs(last_timestamp - first_timestamp)
 
    except (OSError, ValueError) as e:
 
-    print(f"Error getting last line: {e}")
+    print(f"Error getting seconds: {e}")
 
     return None
 
-def get_events_per_second(path="/home/dev/Downloads/access.log"):
+def get_events_per_second(path = "/home/dev/Downloads/access.log"):
     """Returns the number of events per seconds from a log file.
 
         Args:
             path: path location of log file.
 
         Returns:
-            int EPS (Events Per Second).
+            float EPS (Events Per Second).
     """
-    return float(count_lines(path)) / get_seconds(path)
+    try:
+    
+        return float(count_lines(path)) / get_seconds(path)
+
+    except (OSError, ValueError, ZeroDivisionError) as e:
+
+        print(f"Error calculating EPS: {e}")
+
+        return None
+    
+def get_total_bytes_exchanged(path = "/home/dev/Downloads/access.log"):
+   """Returns the total ammount of bytes exchanged from a log file. Assuming we are
+        only interested in the response_size of each line.
+
+        Args:
+            path: path location of log file.
+
+        Returns:
+            int Total bytes exchanged, or None if the file is empty or not found.
+    """
+   try:
+    total_bytes = 0
+
+    print("Processing...")
+
+    with open(path, 'r') as file:
+        for line in file:
+            if parse_line_with_pattern(line, SQUID_PATTERN) != None:
+                if parse_line_with_pattern(line, SQUID_PATTERN)["response_size_bytes"] != None:
+                    total_bytes += int(parse_line_with_pattern(line, SQUID_PATTERN)["response_size_bytes"])
+
+    return total_bytes
+
+   except FileNotFoundError:
+
+    print(f"Error: File '{path}' not found.")
+
+    return None
