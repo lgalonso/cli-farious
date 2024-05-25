@@ -3,6 +3,7 @@ CLI-farious is a clever wordplay that combines "CLI" (command-line interface) an
 
 ## Limitations
 Currently only available as a clonable repository, for Linux-Ubuntu distributions, Docker container under development.
+Currently only analyzes SQUID Proxy logs.
 
 ## Installation
 
