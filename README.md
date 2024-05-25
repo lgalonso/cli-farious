@@ -36,7 +36,7 @@ python setup.py sdist
 
 ### Install package
 
-From the cli-farious folder execute in terminal:
+From the app folder execute in terminal:
 
 ```bash
 pip install .
