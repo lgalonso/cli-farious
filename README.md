@@ -2,8 +2,9 @@
 CLI-farious is a clever wordplay that combines "CLI" (command-line interface) and "various" to suggest a versatile and comprehensive log analysis tool.
 
 ## Limitations
-Currently only available as a clonable repository, for Linux-Ubuntu distributions, Docker container under development.
+Currently only available as a clonable repository, for Linux-Ubuntu distributions, Docker container under development. 
 Currently only analyzes SQUID Proxy logs.
+Input sanitization not implemented due to time limitations.
 
 ## Installation
 
