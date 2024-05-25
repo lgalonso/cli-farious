@@ -19,29 +19,7 @@ git clone https://github.com/lgalonso/cli-farious.git
 Install python version 3.11 or higher.
 
 ```bash
-apt-get install python3 && apt-get install pip
-```
-
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install dependencies.
-
-```bash
-pip install requirements.txt
-```
-
-### Setup distribution
-```bash
-python setup.py bdist_wheel
-```
-```bash
-python setup.py sdist
-```
-
-### Install package
-
-From the app folder execute in terminal:
-
-```bash
-pip install .
+apt-get install python3
 ```
 
 ## Run the application
@@ -109,3 +87,6 @@ cat output.json
     "Bytes": 1100744267
 }
 ```
+
+## Known bugs
+The output file gets overwritten instead of appending new data.
