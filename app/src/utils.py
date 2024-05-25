@@ -1,3 +1,4 @@
+import json
 from collections import Counter
 
 def least_repeated_item(data):
@@ -36,3 +37,55 @@ def most_repeated_item(data):
     return None
   else:
     return Counter(data).most_common(1)[0][0]
+
+def create_file(filepath):
+  """
+  This function creates a new file at the specified filepath if it doesn't exist.
+
+  Args:
+      filepath (str): The path to the file to be created.
+  """
+  try:
+    with open(filepath, "x") as f:
+      pass
+
+    print(f"File '{filepath}' created successfully!")
+
+  except FileExistsError:
+    print(f"File '{filepath}' already exists.")
+
+def write_data_to_file(key, data, path="/home/dev/Downloads/output.json"):
+  """Writes data in JSON format to a specific file.
+
+  Args:
+      key: key to store data in dict.
+      data: data to store.
+      path: path location of file to write data.
+
+  """
+  # Define new data as a Python dictionary
+  new_data = {
+    key : data
+  }
+
+  # Try to open existing file to append data
+  try:
+    with open(path, "r") as infile:
+      existing_data = json.load(infile)
+    existing_data[key] = data
+
+    with open("/home/dev/Downloads/output.json", "w") as outfile:
+      json_string = json.dumps(existing_data, indent=4)
+      outfile.write(json_string)
+
+  except FileNotFoundError:
+    create_file(path)
+    # Open a file for writing in text mode
+    with open(path, "w") as outfile:
+      # Convert dictionary to JSON string (optional for human-readable output)
+      json_string = json.dumps(new_data, indent=4)  # indent for readability (optional)
+    
+      # Write JSON string to the file
+      outfile.write(json_string)
+
+  print(f"Data written to {path}!")
