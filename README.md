@@ -19,7 +19,7 @@ git clone https://github.com/lgalonso/cli-farious.git
 Install python version 3.11 or higher.
 
 ```bash
-apt-get install python && apt-get install pip
+apt-get install python3 && apt-get install pip
 ```
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install dependencies.
