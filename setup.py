@@ -20,6 +20,6 @@ setup(
         "Programming Language :: Python :: 3.11",
         "Operating System :: Ubuntu 24.04 LTS",
     ],
-    install_requires=["click==8.1.7"],
+    install_requires=["click==8.1.7", "cli-farious @ file:///home/dev/dev/repo/cli-farious"],
     python_requires=">=3.11",
 )
